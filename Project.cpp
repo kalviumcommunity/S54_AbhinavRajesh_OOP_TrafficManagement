@@ -5,18 +5,22 @@ using namespace std;
 // Vehicle Class
 class Vehicle {
 public:
-    // Constructor
-    Vehicle(string vType, int vSpeed) : type(vType), speed(vSpeed) {}
-
-    // Member function
-    void displayInfo() {
-        cout << "Vehicle Type: " << type << endl;
-        cout << "Speed: " << speed << " km/h" << endl;
+    // Constructor with This Pointer
+    Vehicle(string type, int speed) {
+        this->type = type;
+        this->speed = speed;
     }
 
-    void accelerate(int increase) {
-        speed += increase;
-        cout << "New Speed: " << speed << " km/h" << endl;
+    // Member function
+    Vehicle* accelerate(int increase) {
+        this->speed += increase;
+        cout << "New Speed: " << this->speed << " km/h" << endl;
+        return this;
+    }
+
+    void displayInfo() {
+        cout << "Vehicle Type: " << this->type << endl;
+        cout << "Speed: " << this->speed << " km/h" << endl;
     }
 
 private:
@@ -27,17 +31,21 @@ private:
 // TrafficLight Class
 class TrafficLight {
 public:
-    // Constructor
-    TrafficLight(string initialColor) : color(initialColor) {}
+    // Constructor with This Pointer
+    TrafficLight(string initialColor) {
+        this->color = initialColor;
+    }
 
     // Member function
     void displayStatus() {
-        cout << "Traffic Light Color: " << color << endl;
+        cout << "Traffic Light Color: " << this->color << endl;
     }       
 
-    void changeColor(string newColor) {
-        color = newColor;
-        cout << "New Traffic Light Color: " << color << endl;
+    
+    TrafficLight* changeColor(string newColor) {
+        this->color = newColor;
+        cout << "New Traffic Light Color: " << this->color << endl;
+        return this;
     }
 
 private:
@@ -65,14 +73,17 @@ private:
     TrafficLight* trafficLight; 
 };
 
-
+// Main function
 int main() {
 
+    // Vehicle and TrafficLight objects
     Vehicle car("Car", 60);
     TrafficLight streetLight("Red");
 
+    // Simulation object
     Simulation citySimulation(&car, &streetLight);
     
+    // RuN
     citySimulation.run();
 
     return 0;
