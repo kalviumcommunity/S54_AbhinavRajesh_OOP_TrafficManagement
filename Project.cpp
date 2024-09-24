@@ -6,7 +6,7 @@ using namespace std;
 class Vehicle {
 public:
     // Constructor with This Pointer
-    Vehicle(string type, int speed) {
+    Vehicle(string type = "Unknown", int speed = 0) {
         this->type = type;
         this->speed = speed;
     }
@@ -32,7 +32,7 @@ private:
 class TrafficLight {
 public:
     // Constructor with This Pointer
-    TrafficLight(string initialColor) {
+    TrafficLight(string initialColor = "Red") {
         this->color = initialColor;
     }
 
@@ -74,16 +74,22 @@ private:
 
 // Main function
 int main() {
+    // Array of Vehicle objects
+    Vehicle vehicles[3] = {
+        Vehicle("Car", 60),
+        Vehicle("Bus", 50),
+        Vehicle("Motorcycle", 80)
+    };
 
-    // Vehicle and TrafficLight objects
-    Vehicle car("Car", 60);
+    // TrafficLight object
     TrafficLight streetLight("Red");
 
-    // Simulation object
-    Simulation citySimulation(&car, &streetLight);
-    
-    // Run
-    citySimulation.run();
+    for (int i = 0; i < 3; ++i) {
+        cout << "Simulating Vehicle " << (i + 1) << ":" << endl;
+        Simulation citySimulation(&vehicles[i], &streetLight);
+        citySimulation.run();
+        cout << endl;
+    }
 
     return 0;
 }
