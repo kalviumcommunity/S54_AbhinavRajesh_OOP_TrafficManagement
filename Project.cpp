@@ -74,22 +74,29 @@ private:
 
 // Main function
 int main() {
-    // Array of Vehicle objects
-    Vehicle vehicles[3] = {
-        Vehicle("Car", 60),
-        Vehicle("Bus", 50),
-        Vehicle("Motorcycle", 80)
-    };
+    // Dynamically allocate an array of Vehicle objects
+    Vehicle* vehicles[3];
+    vehicles[0] = new Vehicle("Car", 60);
+    vehicles[1] = new Vehicle("Bus", 50);
+    vehicles[2] = new Vehicle("Motorcycle", 80);
 
-    // TrafficLight object
-    TrafficLight streetLight("Red");
+    // Dynamically allocate a TrafficLight object
+    TrafficLight* streetLight = new TrafficLight("Red");
 
+    // run the simulation
     for (int i = 0; i < 3; ++i) {
         cout << "Simulating Vehicle " << (i + 1) << ":" << endl;
-        Simulation citySimulation(&vehicles[i], &streetLight);
-        citySimulation.run();
+        Simulation* citySimulation = new Simulation(vehicles[i], streetLight);
+        citySimulation->run();
+        delete citySimulation;
         cout << endl;
     }
+
+    // Clean up
+    for (int i = 0; i < 3; ++i) {
+        delete vehicles[i];
+    }
+    delete streetLight;
 
     return 0;
 }
