@@ -18,9 +18,13 @@ public:
         totalVehicles++;
     }
 
-    // Destructor
     ~Vehicle() {
-        totalVehicles--;
+        totalVehicles--; 
+    }
+
+    // Static member function to get total vehicles
+    static int getTotalVehicles() {
+        return totalVehicles;
     }
 
     // Member function
@@ -37,7 +41,7 @@ public:
         cout << "Vehicle Type: " << this->type << endl;
         cout << "Speed: " << this->speed << " km/h" << endl;
         cout << "Max Speed Limit: " << maxSpeedLimit << " km/h" << endl;
-        cout << "Total Vehicles: " << totalVehicles << endl;
+        cout << "Total Vehicles: " << getTotalVehicles() << endl;
     }
 
 private:
@@ -46,8 +50,8 @@ private:
 };
 
 // Initialize static variables
-int Vehicle::totalVehicles = 0;
-int Vehicle::maxSpeedLimit = 120;
+int Vehicle::totalVehicles = 0;  
+int Vehicle::maxSpeedLimit = 120; 
 
 // TrafficLight Class
 class TrafficLight {
