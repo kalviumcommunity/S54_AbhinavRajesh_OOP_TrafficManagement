@@ -5,15 +5,30 @@ using namespace std;
 // Vehicle Class
 class Vehicle {
 public:
+    // Static variable to track total number of vehicles
+    static int totalVehicles;
+
+    // Static variable for maximum speed limit
+    static int maxSpeedLimit;
+
     // Constructor with This Pointer
     Vehicle(string type = "Unknown", int speed = 0) {
         this->type = type;
         this->speed = speed;
+        totalVehicles++;  // Increment the static variable
+    }
+
+    // Destructor
+    ~Vehicle() {
+        totalVehicles--;  // Decrement the static variable when an object is destroyed
     }
 
     // Member function
     Vehicle* accelerate(int increase) {
         this->speed += increase;
+        if (this->speed > maxSpeedLimit) {
+            this->speed = maxSpeedLimit;  // Ensure speed does not exceed the limit
+        }
         cout << "New Speed: " << this->speed << " km/h" << endl;
         return this;
     }
@@ -21,12 +36,18 @@ public:
     void displayInfo() {
         cout << "Vehicle Type: " << this->type << endl;
         cout << "Speed: " << this->speed << " km/h" << endl;
+        cout << "Max Speed Limit: " << maxSpeedLimit << " km/h" << endl;
+        cout << "Total Vehicles: " << totalVehicles << endl;
     }
 
 private:
     string type;
     int speed; 
 };
+
+// Initialize static variables
+int Vehicle::totalVehicles = 0;  // Initially, no vehicles are created
+int Vehicle::maxSpeedLimit = 120;  // Default speed limit for all vehicles
 
 // TrafficLight Class
 class TrafficLight {
@@ -83,20 +104,20 @@ int main() {
     // Dynamically allocate a TrafficLight object
     TrafficLight* streetLight = new TrafficLight("Red");
 
-    // run the simulation
+    // Loop through the vehicles array and run the simulation
     for (int i = 0; i < 3; ++i) {
         cout << "Simulating Vehicle " << (i + 1) << ":" << endl;
         Simulation* citySimulation = new Simulation(vehicles[i], streetLight);
         citySimulation->run();
-        delete citySimulation;
+        delete citySimulation;  // Free the dynamically allocated Simulation object
         cout << endl;
     }
 
-    // Clean up
+    // Clean up dynamically allocated memory
     for (int i = 0; i < 3; ++i) {
-        delete vehicles[i];
+        delete vehicles[i];  // Free each dynamically allocated Vehicle object
     }
-    delete streetLight;
+    delete streetLight;  // Free the dynamically allocated TrafficLight object
 
     return 0;
 }
