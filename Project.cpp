@@ -15,19 +15,19 @@ public:
     Vehicle(string type = "Unknown", int speed = 0) {
         this->type = type;
         this->speed = speed;
-        totalVehicles++;  // Increment the static variable
+        totalVehicles++;
     }
 
     // Destructor
     ~Vehicle() {
-        totalVehicles--;  // Decrement the static variable when an object is destroyed
+        totalVehicles--;
     }
 
     // Member function
     Vehicle* accelerate(int increase) {
         this->speed += increase;
         if (this->speed > maxSpeedLimit) {
-            this->speed = maxSpeedLimit;  // Ensure speed does not exceed the limit
+            this->speed = maxSpeedLimit;
         }
         cout << "New Speed: " << this->speed << " km/h" << endl;
         return this;
@@ -46,8 +46,8 @@ private:
 };
 
 // Initialize static variables
-int Vehicle::totalVehicles = 0;  // Initially, no vehicles are created
-int Vehicle::maxSpeedLimit = 120;  // Default speed limit for all vehicles
+int Vehicle::totalVehicles = 0;
+int Vehicle::maxSpeedLimit = 120;
 
 // TrafficLight Class
 class TrafficLight {
@@ -104,20 +104,20 @@ int main() {
     // Dynamically allocate a TrafficLight object
     TrafficLight* streetLight = new TrafficLight("Red");
 
-    // Loop through the vehicles array and run the simulation
+    // run the simulation
     for (int i = 0; i < 3; ++i) {
         cout << "Simulating Vehicle " << (i + 1) << ":" << endl;
         Simulation* citySimulation = new Simulation(vehicles[i], streetLight);
         citySimulation->run();
-        delete citySimulation;  // Free the dynamically allocated Simulation object
+        delete citySimulation;
         cout << endl;
     }
 
-    // Clean up dynamically allocated memory
+    // Clean up
     for (int i = 0; i < 3; ++i) {
-        delete vehicles[i];  // Free each dynamically allocated Vehicle object
+        delete vehicles[i];
     }
-    delete streetLight;  // Free the dynamically allocated TrafficLight object
+    delete streetLight;
 
     return 0;
 }
