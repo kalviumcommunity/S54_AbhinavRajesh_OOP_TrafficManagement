@@ -1,19 +1,20 @@
-
 import java.util.*;
+
 // Vehicle Class
 class Vehicle {
     // Static variable
     private static int totalVehicles = 0;
-
+    
     private static int maxSpeedLimit = 120;
 
+    // Private members
     private String type;
     private int speed;
 
     // Constructor
     public Vehicle(String type, int speed) {
-        this.setType(type);
-        this.setSpeed(speed);
+        this.setType(type); 
+        this.setSpeed(speed);  
         totalVehicles++;
     }
 
@@ -28,7 +29,7 @@ class Vehicle {
         System.out.println("Vehicle of type " + this.type + " cleaned up. Total vehicles: " + totalVehicles);
     }
 
-    // Static member function
+    // Getter
     public static int getTotalVehicles() {
         return totalVehicles;
     }
@@ -75,12 +76,12 @@ class Vehicle {
         System.out.println("Total Vehicles: " + getTotalVehicles());
     }
 
-    //Setter
+    // Setter
     public static void setMaxSpeedLimit(int maxSpeed) {
         maxSpeedLimit = maxSpeed;
     }
 
-    //Getter
+    // Getter
     public static int getMaxSpeedLimit() {
         return maxSpeedLimit;
     }
@@ -88,6 +89,7 @@ class Vehicle {
 
 // TrafficLight Class
 class TrafficLight {
+    // Private member
     private String color;
 
     // Constructor
