@@ -155,14 +155,15 @@ public class Main {
     public static void main(String[] args) {
         Vehicle[] vehicles = new Vehicle[3];
         vehicles[0] = new Vehicle("Car", 60);
-        vehicles[1] = new Vehicle("Bus", 50);
+        vehicles[1] = new Vehicle();
         vehicles[2] = new Vehicle("Motorcycle", 80);
 
-        TrafficLight streetLight = new TrafficLight("Red");
-
-        // Run
+        // Run simulation
         for (int i = 0; i < vehicles.length; i++) {
             System.out.println("Simulating Vehicle " + (i + 1) + ":");
+
+            TrafficLight streetLight = new TrafficLight("Red");
+            
             Simulation citySimulation = new Simulation(vehicles[i], streetLight);
             citySimulation.run();
             System.out.println();
