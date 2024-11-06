@@ -1,10 +1,22 @@
 import java.util.*;
 
+// MotorVehicle Class
+class MotorVehicle {
+    protected String engineType;
+
+    public MotorVehicle(String engineType) {
+        this.engineType = engineType;
+    }
+
+    public void startEngine() {
+        System.out.println("Engine started for " + engineType + " vehicle.");
+    }
+}
+
 // Vehicle Class
-class Vehicle {
+class Vehicle extends MotorVehicle {
     // Static variable
     private static int totalVehicles = 0;
-    
     private static int maxSpeedLimit = 120;
 
     // Private members
@@ -12,15 +24,16 @@ class Vehicle {
     private int speed;
 
     // Constructor
-    public Vehicle(String type, int speed) {
-        this.setType(type); 
-        this.setSpeed(speed);  
+    public Vehicle(String type, int speed, String engineType) {
+        super(engineType);
+        this.setType(type);
+        this.setSpeed(speed);
         totalVehicles++;
     }
 
     // Default constructor
     public Vehicle() {
-        this("Unknown", 0);
+        this("Unknown", 0, "Unknown");
     }
 
     // Manual cleanup method
@@ -29,17 +42,16 @@ class Vehicle {
         System.out.println("Vehicle of type " + this.type + " cleaned up. Total vehicles: " + totalVehicles);
     }
 
-    // Getter
+    // Static Getter
     public static int getTotalVehicles() {
         return totalVehicles;
     }
 
-    // Getter
+    // Getter and Setter
     public String getType() {
         return type;
     }
 
-    // Setter
     public void setType(String type) {
         if (type != null && !type.isEmpty()) {
             this.type = type;
@@ -48,12 +60,11 @@ class Vehicle {
         }
     }
 
-    // Getter
+    // Getter and Setter
     public int getSpeed() {
         return speed;
     }
 
-    // Setter
     public void setSpeed(int speed) {
         if (speed >= 0 && speed <= maxSpeedLimit) {
             this.speed = speed;
@@ -62,7 +73,7 @@ class Vehicle {
         }
     }
 
-    // Member function
+    // Accelerate function
     public Vehicle accelerate(int increase) {
         this.setSpeed(this.speed + increase);
         System.out.println("New Speed: " + this.speed + " km/h");
@@ -72,42 +83,58 @@ class Vehicle {
     public void displayInfo() {
         System.out.println("Vehicle Type: " + this.getType());
         System.out.println("Speed: " + this.getSpeed() + " km/h");
+        System.out.println("Engine Type: " + this.engineType);
         System.out.println("Max Speed Limit: " + maxSpeedLimit + " km/h");
         System.out.println("Total Vehicles: " + getTotalVehicles());
     }
 
-    // Setter
+    // Static Setter and Getter
     public static void setMaxSpeedLimit(int maxSpeed) {
         maxSpeedLimit = maxSpeed;
     }
 
-    // Getter
     public static int getMaxSpeedLimit() {
         return maxSpeedLimit;
     }
 }
 
+// ElectricVehicle Class
+class ElectricVehicle extends Vehicle {
+    private int batteryCapacity;
+
+    public ElectricVehicle(String type, int speed, int batteryCapacity) {
+        super(type, speed, "Electric");
+        this.batteryCapacity = batteryCapacity;
+    }
+
+    public void chargeBattery() {
+        System.out.println("Battery charged. Capacity: " + batteryCapacity + "%");
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Battery Capacity: " + batteryCapacity + "%");
+    }
+}
+
 // TrafficLight Class
 class TrafficLight {
-    // Private member
     private String color;
 
-    // Constructor
     public TrafficLight(String initialColor) {
         this.setColor(initialColor);
     }
 
-    // Default constructor
     public TrafficLight() {
         this("Red");
     }
 
-    // Getter
+    // Getter and Setter
     public String getColor() {
         return color;
     }
 
-    // Setter
     public void setColor(String color) {
         if (color.equals("Red") || color.equals("Green") || color.equals("Yellow")) {
             this.color = color;
@@ -116,7 +143,6 @@ class TrafficLight {
         }
     }
 
-    // Member function
     public void displayStatus() {
         System.out.println("Traffic Light Color: " + this.getColor());
     }
@@ -133,13 +159,11 @@ class Simulation {
     private Vehicle vehicle;
     private TrafficLight trafficLight;
 
-    // Constructor
     public Simulation(Vehicle vehicle, TrafficLight trafficLight) {
         this.vehicle = vehicle;
         this.trafficLight = trafficLight;
     }
 
-    // Member function
     public void run() {
         System.out.println("Simulation Started:");
         vehicle.displayInfo();
@@ -154,24 +178,26 @@ class Simulation {
 public class Main {
     public static void main(String[] args) {
         Vehicle[] vehicles = new Vehicle[3];
-        vehicles[0] = new Vehicle("Car", 60);
+        vehicles[0] = new Vehicle("Car", 60, "Petrol");
         vehicles[1] = new Vehicle();
-        vehicles[2] = new Vehicle("Motorcycle", 80);
+        vehicles[2] = new ElectricVehicle("Electric Car", 80, 100);
 
-        // Run simulation
         for (int i = 0; i < vehicles.length; i++) {
             System.out.println("Simulating Vehicle " + (i + 1) + ":");
 
             TrafficLight streetLight = new TrafficLight("Red");
-            
             Simulation citySimulation = new Simulation(vehicles[i], streetLight);
             citySimulation.run();
+
+            if (vehicles[i] instanceof ElectricVehicle) {
+                ((ElectricVehicle) vehicles[i]).chargeBattery();
+            }
             System.out.println();
         }
 
         // Manual Cleanup
-        for (int i = 0; i < vehicles.length; i++) {
-            vehicles[i].cleanup();
+        for (Vehicle vehicle : vehicles) {
+            vehicle.cleanup();
         }
     }
 }
