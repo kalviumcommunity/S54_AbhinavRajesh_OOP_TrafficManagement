@@ -36,6 +36,23 @@ class Vehicle extends MotorVehicle {
         this("Unknown", 0, "Unknown");
     }
 
+    // Method Overloading for accelerate
+    public void accelerate(int increase) {
+        this.setSpeed(this.speed + increase);
+        System.out.println("New Speed: " + this.speed + " km/h");
+    }
+
+    // Overloaded accelerate method (string message)
+    public void accelerate(String message) {
+        System.out.println("Message: " + message);
+    }
+
+    // Accelerate with both integer and string parameters
+    public void accelerate(int increase, String message) {
+        this.setSpeed(this.speed + increase);
+        System.out.println("New Speed: " + this.speed + " km/h, " + message);
+    }
+
     // Manual cleanup method
     public void cleanup() {
         totalVehicles--;
@@ -73,13 +90,7 @@ class Vehicle extends MotorVehicle {
         }
     }
 
-    // Accelerate function
-    public Vehicle accelerate(int increase) {
-        this.setSpeed(this.speed + increase);
-        System.out.println("New Speed: " + this.speed + " km/h");
-        return this;
-    }
-
+    // Display Info method
     public void displayInfo() {
         System.out.println("Vehicle Type: " + this.getType());
         System.out.println("Speed: " + this.getSpeed() + " km/h");
@@ -170,7 +181,11 @@ class Simulation {
         trafficLight.displayStatus();
 
         trafficLight.changeColor("Green");
+        
+        // Calling the overloaded methods
         vehicle.accelerate(20);
+        vehicle.accelerate("Speeding up!");
+        vehicle.accelerate(30, "Accelerating more quickly!");
     }
 }
 
