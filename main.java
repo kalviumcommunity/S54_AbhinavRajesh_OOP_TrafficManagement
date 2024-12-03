@@ -1,4 +1,4 @@
-// Abstract Class
+// Abstract Base Class
 abstract class BaseVehicle {
     protected String engineType;
 
@@ -6,26 +6,50 @@ abstract class BaseVehicle {
         this.engineType = engineType;
     }
 
-    // Abstract Method (Pure Virtual Function)
     public abstract void displayInfo();
 
-    // Common Method
     public void startEngine() {
         System.out.println("Engine started for " + engineType + " vehicle.");
     }
 }
 
-// Vehicle Class
-class Vehicle extends BaseVehicle {
-    private static int totalVehicles = 0;
-    private static int maxSpeedLimit = 120;
+// Separate Class for Vehicle Information (SRP)
+class VehicleInfo {
     private String type;
     private int speed;
 
+    public VehicleInfo(String type, int speed) {
+        this.type = type;
+        this.speed = speed;
+    }
+
+    public void displayInfo() {
+        System.out.println("Vehicle Type: " + type);
+        System.out.println("Speed: " + speed + " km/h");
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+}
+
+// Refactored Vehicle Class for OCP
+class Vehicle extends BaseVehicle {
+    private static int totalVehicles = 0;
+    private static final int MAX_SPEED_LIMIT = 120;
+    private VehicleInfo info;
+
     public Vehicle(String type, int speed, String engineType) {
         super(engineType);
-        this.type = type;
-        this.speed = Math.min(speed, maxSpeedLimit);
+        this.info = new VehicleInfo(type, Math.min(speed, MAX_SPEED_LIMIT));
         totalVehicles++;
     }
 
@@ -33,50 +57,28 @@ class Vehicle extends BaseVehicle {
         this("Unknown", 0, "Unknown");
     }
 
-    // Overloaded
-    public Vehicle accelerate(int increase) {
-        this.speed = Math.min(this.speed + increase, maxSpeedLimit);
-        System.out.println("New Speed: " + this.speed + " km/h");
-        return this;
-    }
-
-    public Vehicle accelerate(String message) {
+    public void accelerate(int increase, String message) {
+        int newSpeed = Math.min(info.getSpeed() + increase, MAX_SPEED_LIMIT);
+        info.setSpeed(newSpeed);
+        System.out.println("New Speed: " + newSpeed + " km/h");
         System.out.println("Message: " + message);
-        return this;
-    }
-
-    public Vehicle accelerate(int increase, String message) {
-        this.accelerate(increase);
-        System.out.println("Message: " + message);
-        return this;
     }
 
     @Override
     public void displayInfo() {
-        System.out.println("Vehicle Type: " + type);
-        System.out.println("Speed: " + speed + " km/h");
+        info.displayInfo();
         System.out.println("Engine Type: " + engineType);
-        System.out.println("Max Speed Limit: " + maxSpeedLimit + " km/h");
+        System.out.println("Max Speed Limit: " + MAX_SPEED_LIMIT + " km/h");
         System.out.println("Total Vehicles: " + totalVehicles);
     }
 
-    // Static Methods
-    public static int getTotalVehicles() {
-        return totalVehicles;
-    }
-
-    public static void setMaxSpeedLimit(int maxSpeed) {
-        maxSpeedLimit = maxSpeed;
-    }
-
-    // Cleanup Method
     public void cleanup() {
         totalVehicles--;
-        System.out.println("Vehicle of type " + type + " cleaned up. Total vehicles: " + totalVehicles);
+        System.out.println("Vehicle of type " + info.getType() + " cleaned up. Total vehicles: " + totalVehicles);
     }
 }
 
-// ElectricVehicle Class
+// ElectricVehicle Class Extending Vehicle
 class ElectricVehicle extends Vehicle {
     private int batteryCapacity;
 
