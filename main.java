@@ -1,15 +1,39 @@
+// ISP: Chargeable Interface
+interface Chargeable {
+    void chargeBattery();
+}
+
+// DIP: Engine Interface
+interface Engine {
+    String getEngineType();
+}
+
+class PetrolEngine implements Engine {
+    @Override
+    public String getEngineType() {
+        return "Petrol";
+    }
+}
+
+class ElectricEngine implements Engine {
+    @Override
+    public String getEngineType() {
+        return "Electric";
+    }
+}
+
 // Abstract Base Class
 abstract class BaseVehicle {
-    protected String engineType;
+    protected Engine engine;
 
-    public BaseVehicle(String engineType) {
-        this.engineType = engineType;
+    public BaseVehicle(Engine engine) {
+        this.engine = engine;
     }
 
     public abstract void displayInfo();
 
     public void startEngine() {
-        System.out.println("Engine started for " + engineType + " vehicle.");
+        System.out.println("Engine started for " + engine.getEngineType() + " vehicle.");
     }
 }
 
@@ -47,14 +71,14 @@ class Vehicle extends BaseVehicle {
     private static final int MAX_SPEED_LIMIT = 120;
     private VehicleInfo info;
 
-    public Vehicle(String type, int speed, String engineType) {
-        super(engineType);
+    public Vehicle(String type, int speed, Engine engine) {
+        super(engine);
         this.info = new VehicleInfo(type, Math.min(speed, MAX_SPEED_LIMIT));
         totalVehicles++;
     }
 
     public Vehicle() {
-        this("Unknown", 0, "Unknown");
+        this("Unknown", 0, new PetrolEngine());
     }
 
     public void accelerate(int increase, String message) {
@@ -67,7 +91,7 @@ class Vehicle extends BaseVehicle {
     @Override
     public void displayInfo() {
         info.displayInfo();
-        System.out.println("Engine Type: " + engineType);
+        System.out.println("Engine Type: " + engine.getEngineType());
         System.out.println("Max Speed Limit: " + MAX_SPEED_LIMIT + " km/h");
         System.out.println("Total Vehicles: " + totalVehicles);
     }
@@ -78,15 +102,16 @@ class Vehicle extends BaseVehicle {
     }
 }
 
-// ElectricVehicle Class Extending Vehicle
-class ElectricVehicle extends Vehicle {
+// ElectricVehicle Class Extending Vehicle and Implementing Chargeable
+class ElectricVehicle extends Vehicle implements Chargeable {
     private int batteryCapacity;
 
     public ElectricVehicle(String type, int speed, int batteryCapacity) {
-        super(type, speed, "Electric");
+        super(type, speed, new ElectricEngine());
         this.batteryCapacity = batteryCapacity;
     }
 
+    @Override
     public void chargeBattery() {
         System.out.println("Battery charged. Capacity: " + batteryCapacity + "%");
     }
@@ -108,8 +133,8 @@ class VehicleSimulator {
             ((Vehicle) vehicle).accelerate(20, "Speeding up!");
         }
 
-        if (vehicle instanceof ElectricVehicle) {
-            ((ElectricVehicle) vehicle).chargeBattery();
+        if (vehicle instanceof Chargeable) {
+            ((Chargeable) vehicle).chargeBattery();
         }
 
         System.out.println();
@@ -120,7 +145,7 @@ class VehicleSimulator {
 public class Main {
     public static void main(String[] args) {
         BaseVehicle[] vehicles = new BaseVehicle[3];
-        vehicles[0] = new Vehicle("Car", 60, "Petrol");
+        vehicles[0] = new Vehicle("Car", 60, new PetrolEngine());
         vehicles[1] = new Vehicle();
         vehicles[2] = new ElectricVehicle("Electric Car", 80, 100);
 
