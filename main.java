@@ -98,6 +98,24 @@ class ElectricVehicle extends Vehicle {
     }
 }
 
+// Utility Class to Simulate Vehicles (LSP)
+class VehicleSimulator {
+    public static void simulate(BaseVehicle vehicle) {
+        vehicle.startEngine();
+        vehicle.displayInfo();
+
+        if (vehicle instanceof Vehicle) {
+            ((Vehicle) vehicle).accelerate(20, "Speeding up!");
+        }
+
+        if (vehicle instanceof ElectricVehicle) {
+            ((ElectricVehicle) vehicle).chargeBattery();
+        }
+
+        System.out.println();
+    }
+}
+
 // Main Class
 public class Main {
     public static void main(String[] args) {
@@ -107,19 +125,7 @@ public class Main {
         vehicles[2] = new ElectricVehicle("Electric Car", 80, 100);
 
         for (BaseVehicle vehicle : vehicles) {
-            System.out.println("Simulating Vehicle:");
-            vehicle.startEngine();
-            vehicle.displayInfo();
-
-            if (vehicle instanceof Vehicle) {
-                ((Vehicle) vehicle).accelerate(20, "Speeding up!");
-            }
-
-            if (vehicle instanceof ElectricVehicle) {
-                ((ElectricVehicle) vehicle).chargeBattery();
-            }
-
-            System.out.println();
+            VehicleSimulator.simulate(vehicle);
         }
 
         // Cleanup Vehicles
